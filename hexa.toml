@@ -1,0 +1,107 @@
+# hexa.toml — hexa-farm standalone package manifest
+#
+# 🌾 HEXA-FARM — n=6 agriculture, food science, coffee, wine, fermentation, and ecology substrate
+# Provenance: extracted from canon@ded52144 on 2026-05-10
+#             (18-leaf migration from canon).
+
+[package]
+name = "hexa-farm"
+version = "0.1.0"
+entry = "cli/hexa-farm.hexa"
+description = "🌾 HEXA-FARM — n=6 agriculture, food science, coffee, wine, fermentation, and ecology substrate (18-verb library). Each verb derives parameters from σ(6)=12, τ(6)=4, φ(6)=2 number theory. SPEC_CATALOG_ONLY at v0.1.0."
+license = "MIT"
+authors = ["박민우 <nerve011235@gmail.com>"]
+repository = "https://github.com/dancinlab/hexa-farm"
+homepage = "https://github.com/dancinlab/hexa-farm"
+readme = "README.md"
+keywords = ["hexa-family", "n6-lattice", "agriculture", "food-science", "coffee", "wine-enology", "fermentation", "ecology", "horticulture", "mycology", "spec-catalog"]
+categories = ["spec-catalog", "hexa-family"]
+
+[[bin]]
+name = "hexa-farm"
+path = "cli/hexa-farm.hexa"
+
+[test]
+runner = "hexa"
+files = [
+    "tests/test_selftest.hexa",
+]
+
+[scripts]
+install = "install.hexa"
+
+# ── Verb manifest (verb_parent = "." → each verb is a top-level folder) ──
+verb_parent = "."
+
+[verbs]
+agriculture = ["agriculture"]
+apiculture = ["apiculture"]
+aquaculture = ["aquaculture"]
+baking = ["baking"]
+biochar-dryland-restoration = ["biochar-dryland-restoration"]
+cheese-dairy = ["cheese-dairy"]
+coffee = ["coffee"]
+coffee-science = ["coffee-science"]
+ecology = ["ecology"]
+ecology-agriculture-food = ["ecology-agriculture-food"]
+entomology = ["entomology"]
+fermentation = ["fermentation"]
+food-science = ["food-science"]
+horticulture = ["horticulture"]
+mycology = ["mycology"]
+urban-farming = ["urban-farming"]
+viticulture = ["viticulture"]
+wine-enology = ["wine-enology"]
+
+# ── Modules manifest (primary md per verb) ────────────────
+[modules]
+specs = [
+    "agriculture/agriculture.md",
+    "apiculture/apiculture.md",
+    "aquaculture/aquaculture.md",
+    "baking/baking.md",
+    "biochar-dryland-restoration/biochar-dryland-restoration.md",
+    "cheese-dairy/cheese-dairy.md",
+    "coffee/coffee.md",
+    "coffee-science/coffee-science.md",
+    "ecology/ecology.md",
+    "ecology-agriculture-food/ecology-agriculture-food.md",
+    "entomology/entomology.md",
+    "fermentation/fermentation.md",
+    "food-science/food-science.md",
+    "horticulture/horticulture.md",
+    "mycology/mycology.md",
+    "urban-farming/urban-farming.md",
+    "viticulture/viticulture.md",
+    "wine-enology/wine-enology.md",
+]
+
+[dependencies]
+hexa-lang = ">=1.0.0"
+python    = ">=3.10"   # stdlib only
+
+# ── n=6 master identity ───────────────────────────────────
+[invariants.n6]
+sigma_6           = 12
+tau_6             = 4
+phi_6             = 2
+J_2               = 24
+master_identity   = "σ(6) · φ(6) = n · τ(6) = J₂ = 24"
+verb_count        = 18
+
+# ── Closure provenance ────────────────────────────────────
+[closure]
+verbs_total       = 18
+verbs_wired       = 0
+verbs_spec        = 18
+verifiers_pass    = "TBD (initial extraction)"
+verdict           = "SPEC_CATALOG_ONLY"
+extracted_from    = "canon@ded52144 on 2026-05-10"
+
+# ── Scope honesty ─────────────────────────────────────────
+[scope]
+honest_scope = "🌾 18-verb agriculture, food science, coffee, wine, fermentation, and ecology substrate library. Reading the closed-form spec is grounded; running it requires the unsolved engineering or domain implementation."
+
+[cost]
+mac_local_default = "$0 (markdown spec library + .hexa CLI)"
+all_verbs         = "$0 (read-only)"

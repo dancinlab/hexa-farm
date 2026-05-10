@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use hexa-farm in academic work, please cite as below."
+title: "hexa-farm: HEXA family substrate (n=6 invariant lattice — agriculture·food·coffee·wine·ecology)"
+authors:
+  - name: dancinlab contributors
+    affiliation: dancinlab
+license: MIT
+repository-code: "https://github.com/dancinlab/hexa-farm"
+url: "https://github.com/dancinlab/hexa-farm"
+version: "v0.1.0"
+date-released: "2026-05-10"
+keywords:
+  - hexa-family
+  - n6-lattice
+  - agriculture
+  - food-science
+  - coffee
+  - wine-enology
+  - fermentation
+  - ecology
+  - horticulture
+  - mycology
+  - spec-catalog
