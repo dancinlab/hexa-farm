@@ -66,20 +66,20 @@ the larger `canon` monorepo; this standalone repo extracts 18 leaves
 
 ## Install
 
-### Via `hx` (works today)
-
 ```bash
-hx install hexa-farm --entry cli/hexa-farm.hexa
-hexa-farm --version           # → 0.1.0
-hexa-farm selftest            # → 18/18 verb specs PASS
+# 1. Install hexa-lang (gives you `hexa` + `hx` package manager)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/dancinlab/hexa-lang/main/install.sh)"
+
+# 2. Install hexa-farm
+hx install hexa-farm
 ```
 
-### CLI subcommands
+## Run
 
 ```bash
-hexa-farm list                # 18-verb table
-hexa-farm <verb>              # read verb spec (path + first 20 lines)
-hexa-farm selftest            # 18/18 spec presence sweep
+hexa-farm <verb>     # render any of 18 verbs (see `hexa-farm list`)
+hexa-farm list       # verb table
+hexa-farm selftest   # 18-verb spec presence sweep
 ```
 
 ---
