@@ -1,0 +1,134 @@
+#!hexa strict
+// hexa-farm/verify/real_limits_anchor.hexa — real-limits-first anchor.
+//
+// Per LATTICE_POLICY.md §1.3 rule 2: each project's verify must use at
+// least one anchor from §1.2 (Shannon · Kolmogorov · Bekenstein · c · ℏ ·
+// k · Stefan-Boltzmann · Carnot · etc.) and at least one engineering /
+// industry threshold appropriate to the domain.
+//
+// hexa-farm's real-limits audit lives in LIMIT_BREAKTHROUGH.md (Wave M,
+// 2026-05-12). This script confirms that file is present and references
+// the canonical agriculture/food/coffee/wine/ecology HARD walls so any
+// agent has a pointer from verify→audit.
+//
+// Per raw#10 C3 + user constraint: agriculture is heavily measured.
+// Crop yields cite FAO/USDA datasets, coffee chemistry cites SCA cupping
+// protocols, wine cites Wine Spectator / Robert Parker / IWSR / Vinexpo,
+// ecology cites IUCN / WWF — each domain uses ITS OWN canonical values,
+// no lattice fit. The anchors below verify those external sources are
+// referenced (presence audit only — no lattice-mapping claim is made).
+//
+// Honesty: no value here is computed against the n=6 lattice. Every
+// constant is sourced from the cited external authority in
+// LIMIT_BREAKTHROUGH.md.
+
+let HOME = env("HOME")
+let HEXA_FARM_ROOT_ENV = env("HEXA_FARM_ROOT")
+
+fn shq(s: str) -> str {
+    return "'" + s.replace("'", "'\\''") + "'"
+}
+
+fn _resolve_root() -> str {
+    if HEXA_FARM_ROOT_ENV.len() > 0 { return HEXA_FARM_ROOT_ENV }
+    let oldpwd = env("OLDPWD")
+    if oldpwd.len() > 0 {
+        let t = exec("[ -f " + shq(oldpwd) + "/hexa.toml ] && echo y || echo n").trim()
+        if t == "y" { return oldpwd }
+    }
+    let pwd = env("PWD")
+    if pwd.len() > 0 {
+        let t = exec("[ -f " + shq(pwd) + "/hexa.toml ] && echo y || echo n").trim()
+        if t == "y" { return pwd }
+    }
+    return HOME + "/core/hexa-farm"
+}
+
+fn _file_exists(p: str) -> bool {
+    let r = exec("[ -f " + shq(p) + " ] && echo yes || echo no").trim()
+    return r == "yes"
+}
+
+fn _file_contains(p: str, needle: str) -> bool {
+    let cmd = "grep -F " + shq(needle) + " " + shq(p) + " >/dev/null 2>&1 && echo yes || echo no"
+    let r = exec(cmd).trim()
+    return r == "yes"
+}
+
+fn main() {
+    let root = _resolve_root()
+    println("hexa-farm/verify/real_limits_anchor — real-limits-first check")
+    println("  root: " + root)
+    println("")
+    println("  policy: LATTICE_POLICY §1.3 rule 2 — at least 1 real limit anchor required")
+    println("  source: LIMIT_BREAKTHROUGH.md (Wave M, agriculture audit)")
+    println("  raw#10 C3: FAO/USDA/SCA/IUCN/WWF/IWSR use THEIR OWN values — no lattice-fit")
+    println("")
+
+    let mut ok = 0
+    let mut bad = 0
+
+    // 1. Audit file must exist.
+    let audit = root + "/LIMIT_BREAKTHROUGH.md"
+    if _file_exists(audit) {
+        println("  [PASS] LIMIT_BREAKTHROUGH.md present")
+        ok = ok + 1
+    } else {
+        println("  [FAIL] LIMIT_BREAKTHROUGH.md missing (abs: " + audit + ")")
+        bad = bad + 1
+    }
+
+    // 2. Audit must reference canonical agriculture/food HARD walls.
+    //    Each anchor is a sourced HARD/SOFT wall from LIMIT_BREAKTHROUGH.md §2.
+    let anchors = [
+        ["Photosynthesis ceiling ~6% C4 / ~3% C3 (HARD biochemistry)", "C4"],
+        ["Water 70% of human withdrawal for agriculture (FAO)",        "FAO"],
+        ["Haber-Bosch ~30 GJ/t NH3 (HARD thermodynamics)",             "Haber-Bosch"],
+        ["Land 130 M km^2 ice-free (HARD geometry)",                    "km²"],
+        ["Yield gap analysis (Foley 2011 / Tilman 2011)",              "Tilman"],
+        ["Pest pre-harvest loss 20-40% (Oerke 2006)",                  "Oerke"],
+        ["Coffee Arabica climate envelope (Bunn 2015)",                 "Bunn"],
+        ["Pollinator dependence ~35% (Klein 2007)",                     "Klein"],
+        ["RuBisCO / Z-scheme (Zhu, Long, Ort 2010)",                    "RuBisCO"],
+        ["Mekonnen & Hoekstra water-footprint LCA",                     "Mekonnen"],
+    ]
+    for a in anchors {
+        let label = a[0]
+        let needle = a[1]
+        if _file_contains(audit, needle) {
+            println("  [PASS] anchor referenced: " + label)
+            ok = ok + 1
+        } else {
+            println("  [FAIL] anchor missing: " + label + " (needle: '" + needle + "')")
+            bad = bad + 1
+        }
+    }
+
+    // 3. Honesty caveats: external-source authority + no-lattice-fit disclosure.
+    //    Per raw#10 C3 + LATTICE_POLICY §3.3 — external entities use their own
+    //    invariants, never the n=6 lattice.
+    let caveats = [
+        ["FAO authority for agricultural stats",        "FAO"],
+        ["No n=6 lattice anchors used (LATTICE_POLICY §1.2)", "lattice"],
+        ["Climate-change disclosure",                    "Climate"],
+    ]
+    for c in caveats {
+        let label = c[0]
+        let needle = c[1]
+        if _file_contains(audit, needle) {
+            println("  [PASS] caveat present: " + label)
+            ok = ok + 1
+        } else {
+            println("  [FAIL] caveat missing: " + label)
+            bad = bad + 1
+        }
+    }
+
+    println("")
+    println("  anchors verified: " + str(ok) + "  failures: " + str(bad))
+    if bad > 0 {
+        println("__HEXA_FARM_REAL_LIMITS_ANCHOR__ FAIL")
+        exit(1)
+    }
+    println("__HEXA_FARM_REAL_LIMITS_ANCHOR__ PASS")
+}

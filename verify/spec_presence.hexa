@@ -1,0 +1,87 @@
+#!hexa strict
+// hexa-farm/verify/spec_presence.hexa — 18-verb spec doc presence verifier.
+//
+// Closure anchor #1 for hexa-farm (spec-first substrate):
+// each of the 18 verbs declared in hexa.toml [verbs] must resolve to a
+// real spec markdown at <subdir>/<filename>. This is the *honest* closure
+// check for a spec-first repo — file presence, not behavioural promise.
+//
+// Per LATTICE_POLICY §1.3: spec-presence is real engineering verification
+// (files exist on disk); not a lattice tautology.
+
+let HOME = env("HOME")
+let HEXA_FARM_ROOT_ENV = env("HEXA_FARM_ROOT")
+
+fn shq(s: str) -> str {
+    return "'" + s.replace("'", "'\\''") + "'"
+}
+
+fn _resolve_root() -> str {
+    if HEXA_FARM_ROOT_ENV.len() > 0 { return HEXA_FARM_ROOT_ENV }
+    let oldpwd = env("OLDPWD")
+    if oldpwd.len() > 0 {
+        let t = exec("[ -f " + shq(oldpwd) + "/hexa.toml ] && echo y || echo n").trim()
+        if t == "y" { return oldpwd }
+    }
+    let pwd = env("PWD")
+    if pwd.len() > 0 {
+        let t = exec("[ -f " + shq(pwd) + "/hexa.toml ] && echo y || echo n").trim()
+        if t == "y" { return pwd }
+    }
+    return HOME + "/core/hexa-farm"
+}
+
+fn _file_exists(p: str) -> bool {
+    let r = exec("[ -f " + shq(p) + " ] && echo yes || echo no").trim()
+    return r == "yes"
+}
+
+// 18-verb spec registry — must match cli/hexa-farm.hexa VERBS and hexa.toml [verbs].
+let VERBS = [
+    ["agriculture",                  "agriculture/agriculture.md"],
+    ["apiculture",                   "apiculture/apiculture.md"],
+    ["aquaculture",                  "aquaculture/aquaculture.md"],
+    ["baking",                       "baking/baking.md"],
+    ["biochar-dryland-restoration",  "biochar-dryland-restoration/biochar-dryland-restoration.md"],
+    ["cheese-dairy",                 "cheese-dairy/cheese-dairy.md"],
+    ["coffee",                       "coffee/coffee.md"],
+    ["coffee-science",               "coffee-science/coffee-science.md"],
+    ["ecology",                      "ecology/ecology.md"],
+    ["ecology-agriculture-food",     "ecology-agriculture-food/ecology-agriculture-food.md"],
+    ["entomology",                   "entomology/entomology.md"],
+    ["fermentation",                 "fermentation/fermentation.md"],
+    ["food-science",                 "food-science/food-science.md"],
+    ["horticulture",                 "horticulture/horticulture.md"],
+    ["mycology",                     "mycology/mycology.md"],
+    ["urban-farming",                "urban-farming/urban-farming.md"],
+    ["viticulture",                  "viticulture/viticulture.md"],
+    ["wine-enology",                 "wine-enology/wine-enology.md"],
+]
+
+fn main() {
+    let root = _resolve_root()
+    println("hexa-farm/verify/spec_presence — 18-verb spec doc presence")
+    println("  root: " + root)
+    println("")
+    let mut ok = 0
+    let mut bad = 0
+    for row in VERBS {
+        let verb = row[0]
+        let rel = row[1]
+        let abs_p = root + "/" + rel
+        if _file_exists(abs_p) {
+            println("  [PASS] " + verb + " -> " + rel)
+            ok = ok + 1
+        } else {
+            println("  [FAIL] " + verb + " -> " + rel + " MISSING (abs: " + abs_p + ")")
+            bad = bad + 1
+        }
+    }
+    println("")
+    println("  spec docs present: " + str(ok) + " / 18")
+    if bad > 0 {
+        println("__HEXA_FARM_SPEC_PRESENCE__ FAIL")
+        exit(1)
+    }
+    println("__HEXA_FARM_SPEC_PRESENCE__ PASS")
+}

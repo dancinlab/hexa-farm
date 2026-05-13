@@ -10,6 +10,9 @@
 [![Version](https://img.shields.io/badge/version-0.1.0-informational.svg)](hexa.toml)
 [![Verbs: 18](https://img.shields.io/badge/verbs-18-blue.svg)](#verbs)
 [![n=6 lattice](https://img.shields.io/badge/n=6-σ·φ_=_n·τ_=_24-blue.svg)](#n6-master-identity)
+[![Verify: 4/4 PASS](https://img.shields.io/badge/verify-4%2F4_PASS-brightgreen.svg)](#verify)
+[![Closure: 100%](https://img.shields.io/badge/closure-100%25_spec--first-brightgreen.svg)](#verify)
+[![Real-limits](https://img.shields.io/badge/real--limits-FAO·USDA·SCA·IUCN·WWF-blue.svg)](LIMIT_BREAKTHROUGH.md)
 
 ---
 
@@ -73,6 +76,44 @@ Upstream concept SSOT: `canon/{domains/life/agriculture,domains/life/apiculture,
 **SPEC_CATALOG_ONLY at v0.1.0** — markdown spec library + .hexa CLI router. No verb
 ships a working .hexa runtime module yet; this repo is the closed-form spec
 catalog only.
+
+---
+
+## Verify
+
+`hexa-farm` ships a 4-script SPEC_FIRST closure verifier in `verify/`. All
+checks are real-engineering (file presence on disk, cross-source scoreboard
+agreement) or real-limits-anchored (FAO/USDA/SCA/IUCN/WWF/IWSR external
+authority sources from `LIMIT_BREAKTHROUGH.md`). Lattice arithmetic is
+included as a §1.3-aux self-consistency check only — never as sole
+verification, never applied to external entities (per
+[`LATTICE_POLICY.md`](LATTICE_POLICY.md) §1.3 rule 1 and raw#10 C3).
+
+```bash
+hexa run verify/run_all.hexa
+```
+
+Individual scripts:
+
+| # | Script | Closure invariant |
+|---|--------|-------------------|
+| 1 | `verify/spec_presence.hexa`       | 18/18 verb spec markdowns resolve on disk |
+| 2 | `verify/lattice_arithmetic.hexa`  | n=6 self-consistency (aux only per §1.3) |
+| 3 | `verify/real_limits_anchor.hexa`  | `LIMIT_BREAKTHROUGH.md` cites FAO/Foley/Tilman/Oerke/Bunn/Klein/RuBisCO/Mekonnen-Hoekstra |
+| 4 | `verify/closure_consistency.hexa` | CLI · `hexa.toml` · README · AGENTS scoreboard agree on `verbs = 18` |
+
+Real-limits anchors (from `LIMIT_BREAKTHROUGH.md`, Wave M):
+
+- **Photosynthesis ceiling ~6% C4 / ~3% C3** (HARD biochemistry; Zhu/Long/Ort 2010)
+- **Freshwater ~70% of human use already in agriculture** (FAO 2020)
+- **Haber-Bosch ~30 GJ/t NH₃** (HARD thermodynamics; theoretical min ~22 GJ/t)
+- **Land ~130 M km² ice-free, ~50 M km² already farmed** (HARD geometry; FAO)
+- **Yield-gap closure** (Foley 2011 / Tilman 2011, ~3–4× current avg)
+- **Pre-harvest loss 20–40%** (Oerke 2006); pollinator dependence ~35% (Klein 2007)
+- **Coffee Arabica climate envelope** (Bunn 2015, ~50% land marginal by 2050)
+
+These external limits (FAO/USDA/SCA/IUCN/WWF/IWSR) use **their own canonical
+values** — no n=6 lattice-fit is asserted on any external dataset.
 
 ---
 

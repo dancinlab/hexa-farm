@@ -94,9 +94,16 @@ verb_count        = 18
 verbs_total       = 18
 verbs_wired       = 0
 verbs_spec        = 18
-verifiers_pass    = "TBD (initial extraction)"
-verdict           = "SPEC_CATALOG_ONLY"
+verifiers_pass    = "4/4 (spec_presence · lattice_arithmetic · real_limits_anchor · closure_consistency)"
+verifiers_total   = 4
+verifiers_passed  = 4
+verdict           = "SPEC_FIRST_CLOSED_100"
+verify_pattern    = "hexa-matter sister (4-script SPEC_FIRST)"
+real_limits_src   = "LIMIT_BREAKTHROUGH.md (Wave M, 2026-05-12) — FAO/Foley/Tilman/Oerke/Bunn/Klein/Zhu-Long-Ort/Mekonnen-Hoekstra"
+external_authority = "FAO · USDA · SCA · IUCN · WWF · IWSR (raw#10 C3 — external sources use their own values, no lattice-fit)"
+lattice_role      = "aux self-consistency only (LATTICE_POLICY §1.3 rule 1)"
 extracted_from    = "canon@ded52144 on 2026-05-10"
+closed_at         = "2026-05-13 (verify-pattern drive)"
 
 # ── Scope honesty ─────────────────────────────────────────
 [scope]

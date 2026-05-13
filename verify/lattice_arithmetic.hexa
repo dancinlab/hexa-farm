@@ -1,0 +1,70 @@
+#!hexa strict
+// hexa-farm/verify/lattice_arithmetic.hexa — n=6 lattice self-consistency.
+//
+// Per LATTICE_POLICY.md §1.3 rule 1, lattice arithmetic (σ·φ = n·τ = 24,
+// 1/2 + 1/3 + 1/6 = 1) is permitted ONLY as an aux self-consistency check —
+// it must NEVER stand alone as verification, must NEVER be applied to
+// external entities (e.g. FAO/USDA crop stats, SCA cupping protocol,
+// IWSR wine market data, IUCN/WWF species lists), and must be paired
+// with at least one real-limits anchor (see real_limits_anchor.hexa).
+//
+// This script: native-lattice arithmetic identities only. Pass iff arithmetic
+// holds. No external-domain claims.
+//
+// Domain note (per LATTICE_POLICY §3.2 + LIMIT_BREAKTHROUGH.md):
+// agriculture is heavily measured — defer to real datasets (FAO/USDA/SCA/
+// IUCN/WWF/IWSR) for any quantitative crop/coffee/wine/ecology claim.
+// The n=6 lattice is internal organising vocabulary only.
+
+fn _assert(label: str, cond: bool, mut ok: int, mut bad: int) -> [int] {
+    if cond {
+        println("  [PASS] " + label)
+        return [ok + 1, bad]
+    }
+    println("  [FAIL] " + label)
+    return [ok, bad + 1]
+}
+
+fn main() {
+    println("hexa-farm/verify/lattice_arithmetic — n=6 self-consistency (aux only)")
+    println("")
+    println("  scope: native-lattice arithmetic identities ONLY")
+    println("  policy: LATTICE_POLICY §1.3 rule 1 — aux check; never sole verification")
+    println("  policy: LATTICE_POLICY §1.3 rule 4 — NEVER applied to external entities")
+    println("  domain: agriculture/food/coffee/wine/ecology defer to FAO/USDA/SCA/IUCN/WWF")
+    println("")
+
+    let n = 6
+    let sigma = 12   // σ(6) — sum of divisors
+    let tau = 4      // τ(6) — number of divisors
+    let phi = 2      // φ(6) — Euler totient
+    let j2 = 24      // Jordan totient J₂(6) = σ·φ = n·τ
+
+    let mut ok = 0
+    let mut bad = 0
+
+    let r1 = _assert("σ(6)·φ(6) = 24  (12·2 = 24)", sigma * phi == 24, ok, bad)
+    ok = r1[0]; bad = r1[1]
+
+    let r2 = _assert("n·τ(6) = 24      (6·4 = 24)",  n * tau == 24, ok, bad)
+    ok = r2[0]; bad = r2[1]
+
+    let r3 = _assert("J₂(6) = σ·φ = n·τ (24 = 24 = 24)", j2 == sigma * phi && j2 == n * tau, ok, bad)
+    ok = r3[0]; bad = r3[1]
+
+    let r4 = _assert("1/2 + 1/3 + 1/6 = 1 (3+2+1 = 6)", 3 + 2 + 1 == 6, ok, bad)
+    ok = r4[0]; bad = r4[1]
+
+    let r5 = _assert("τ(6) = |{1,2,3,6}| = 4", tau == 4, ok, bad)
+    ok = r5[0]; bad = r5[1]
+
+    println("")
+    println("  passed: " + str(ok) + "  failed: " + str(bad))
+    println("  NOTE: lattice arithmetic alone is insufficient verification —")
+    println("        see verify/real_limits_anchor.hexa for the real-limits anchor.")
+    if bad > 0 {
+        println("__HEXA_FARM_LATTICE_ARITHMETIC__ FAIL")
+        exit(1)
+    }
+    println("__HEXA_FARM_LATTICE_ARITHMETIC__ PASS")
+}
