@@ -46,7 +46,7 @@
 @I id001 := "hexa-farm" :: identity-claim [d=2026-05-14 active]
   kind = "HEXA-Farm family — agriculture"
   brief = "HEXA-Farm family · agriculture"
-  parent = "dancinlab/echoes"
+  parent = "dancinlab"
 
 @L l1 := "repo-layout" :: structure [active]
   AGENTS.tape -> "this file · governance + identity (.tape v1.2)"
